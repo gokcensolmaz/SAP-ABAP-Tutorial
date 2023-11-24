@@ -7,6 +7,8 @@
 *&---------------------------------------------------------------------*
 REPORT zegs_sample06.
 
+DATA: gv_name type char20,
+      gv_sname type char20.
 
 START-OF-SELECTION.
   CALL SCREEN 0100.
@@ -31,6 +33,7 @@ ENDMODULE.
 MODULE user_command_0100 INPUT.
   CASE sy-ucomm.
     WHEN '&BACK'.
+      MESSAGE gv_name type 'I'.
       LEAVE TO SCREEN 0.
   ENDCASE.
 ENDMODULE.
