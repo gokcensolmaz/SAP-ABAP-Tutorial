@@ -15,9 +15,23 @@ DATA: gv_rad1 TYPE char1,
 
 DATA: gv_checkbox TYPE xfeld.
 
-DATA: gv_text TYPE string.
+DATA: gv_age    TYPE i,
+      gv_id     TYPE vrm_id,
+      gt_values TYPE vrm_values,
+      gs_value  TYPE vrm_value.
+
+DATA: gv_text  TYPE string,
+      gv_index TYPE i.
 
 START-OF-SELECTION.
+  gv_index = 0.
+  DO 60 TIMES.
+    gv_index = gv_index + 1.
+    gs_value-key = gv_index.
+    gs_value-text = gv_index + 17.
+    APPEND gs_value TO gt_values.
+  ENDDO.
+
   CALL SCREEN 0100.
 
 
@@ -29,6 +43,16 @@ START-OF-SELECTION.
 MODULE status_0100 OUTPUT.
   SET PF-STATUS '0100'.
 *  SET TITLEBAR 'xxx'.
+
+  gv_id = 'GV_AGE'.
+  CALL FUNCTION 'VRM_SET_VALUES'
+    EXPORTING
+      id     = gv_id
+      values = gt_values.
+  IF sy-subrc <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
 ENDMODULE.
 
 
