@@ -23,7 +23,12 @@ DATA: gv_age    TYPE i,
 DATA: gv_text  TYPE string,
       gv_index TYPE i.
 
+DATA: gv_date type datum.
+
+DATA: ok_code TYPE sy-ucomm.
+
 START-OF-SELECTION.
+
   gv_index = 0.
   DO 60 TIMES.
     gv_index = gv_index + 1.
@@ -63,7 +68,8 @@ ENDMODULE.
 *----------------------------------------------------------------------*
 MODULE user_command_0100 INPUT.
 
-  CASE sy-ucomm.
+*  CASE sy-ucomm.
+  CASE ok_code.
     WHEN '&BACK'.
       IF gv_rad1 EQ abap_true. " == IF gv_rad1 eq 'X'.
         gv_text = 'Gender is Male'.
