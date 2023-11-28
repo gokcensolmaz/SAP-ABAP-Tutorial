@@ -22,6 +22,8 @@ DATA: gt_list TYPE TABLE OF gty_list,
 DATA: gt_fieldcat TYPE slis_t_fieldcat_alv,
       gs_fieldcat TYPE slis_fieldcat_alv.
 
+DATA: gs_layout TYPE slis_layout_alv.
+
 START-OF-SELECTION.
 
   SELECT
@@ -35,7 +37,7 @@ START-OF-SELECTION.
     INNER JOIN ekpo ON ekpo~ebeln EQ ekko~ebeln
     INTO TABLE gt_list.
 
-* Add Column names to field catalog
+*&----------------FIELD CATALOG---------------
   CLEAR: gs_fieldcat.
   gs_fieldcat-fieldname = 'EBELN'.
   gs_fieldcat-seltext_s = 'SAS No'.
@@ -61,7 +63,7 @@ START-OF-SELECTION.
   gs_fieldcat-seltext_m = 'Belge Tipi'.
   gs_fieldcat-seltext_l = 'Belge Tipi'.
   gs_fieldcat-col_pos = 2.
-  gs_fieldcat-edit      = 'X'.
+*  gs_fieldcat-edit      = 'X'.
   APPEND gs_fieldcat TO gt_fieldcat.
 
   CLEAR: gs_fieldcat.
@@ -89,6 +91,10 @@ START-OF-SELECTION.
   gs_fieldcat-do_sum = abap_true.
   APPEND gs_fieldcat TO gt_fieldcat.
 
+*&-----------------LAYOUT-----------------
+  gs_layout-window_titlebar = 'REUSE ALV Example'.
+  gs_layout-zebra             = 'X'.
+  gs_layout-colwidth_optimize = 'X'.
 
   CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
     EXPORTING
@@ -105,7 +111,7 @@ START-OF-SELECTION.
 *     I_BACKGROUND_ID                   = ' '
 *     I_GRID_TITLE                      =
 *     I_GRID_SETTINGS                   =
-*     is_layout   =
+      is_layout   = gs_layout
       it_fieldcat = gt_fieldcat
 *     IT_EXCLUDING                      =
 *     IT_SPECIAL_GROUPS                 =
