@@ -2,6 +2,7 @@
 *&  Include           ZEGS_SAMPLE11_TOP
 *&---------------------------------------------------------------------*
 TYPES: BEGIN OF gty_list,
+         selkz TYPE char1,
          ebeln TYPE ebeln,
          ebelp TYPE ebelp,
          bstyp TYPE ebstyp,
@@ -17,3 +18,6 @@ DATA: gt_fieldcat TYPE slis_t_fieldcat_alv,
       gs_fieldcat TYPE slis_fieldcat_alv.
 
 DATA: gs_layout TYPE slis_layout_alv.
+
+DATA: gt_events TYPE slis_t_event,
+      gs_event  TYPE slis_alv_event.
