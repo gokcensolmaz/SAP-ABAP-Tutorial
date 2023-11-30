@@ -23,15 +23,34 @@ FORM get_data .
 
   LOOP AT gt_list INTO gs_list.
     IF gs_list-ebelp EQ '10'.
-      gs_list-line_color = 'C600'.
-      MODIFY gt_list FROM gs_list.
-    ELSEIF gs_list-ebelp EQ '20'.
-      gs_list-line_color = 'C300'.
-      MODIFY gt_list FROM gs_list.
-    ELSEIF gs_list-ebelp EQ '30'.
-      gs_list-line_color = 'C500'.
+      CLEAR: gs_cell_color.
+      gs_cell_color-fieldname = 'TXZ01'.
+      gs_cell_color-color-col = 3.
+      gs_cell_color-color-int = 1.
+      gs_cell_color-color-inv = 0.
+      APPEND gs_cell_color TO gs_list-cell_color.
+
+      CLEAR: gs_cell_color.
+      gs_cell_color-fieldname = 'EBELP'.
+      gs_cell_color-color-col = 3.
+      gs_cell_color-color-int = 1.
+      gs_cell_color-color-inv = 0.
+      APPEND gs_cell_color TO gs_list-cell_color.
       MODIFY gt_list FROM gs_list.
     ENDIF.
+
+
+*    -----LINE COLOR------
+*    IF gs_list-ebelp EQ '10'.
+*      gs_list-line_color = 'C600'.
+*      MODIFY gt_list FROM gs_list.
+*    ELSEIF gs_list-ebelp EQ '20'.
+*      gs_list-line_color = 'C300'.
+*      MODIFY gt_list FROM gs_list.
+*    ELSEIF gs_list-ebelp EQ '30'.
+*      gs_list-line_color = 'C500'.
+*      MODIFY gt_list FROM gs_list.
+*    ENDIF.
 
   ENDLOOP.
 
@@ -102,7 +121,8 @@ FORM set_layout .
   gs_layout-zebra             = 'X'.
   gs_layout-colwidth_optimize = 'X'.
   gs_layout-box_fieldname = 'SELKZ'.
-  gs_layout-info_fieldname = 'LINE_COLOR'.
+*  gs_layout-info_fieldname = 'LINE_COLOR'.
+  gs_layout-coltab_fieldname = 'CELL_COLOR'.
 
 ENDFORM.
 *&---------------------------------------------------------------------*

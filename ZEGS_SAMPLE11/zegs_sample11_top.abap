@@ -10,6 +10,7 @@ TYPES: BEGIN OF gty_list,
          txz01      TYPE txz01,
          menge      TYPE bstmg,
          line_color TYPE char4,
+         cell_color TYPE slis_t_specialcol_alv,
        END OF gty_list.
 
 DATA: gt_list TYPE TABLE OF gty_list,
@@ -22,3 +23,5 @@ DATA: gs_layout TYPE slis_layout_alv.
 
 DATA: gt_events TYPE slis_t_event,
       gs_event  TYPE slis_alv_event.
+
+DATA: gs_cell_color type slis_specialcol_alv.
