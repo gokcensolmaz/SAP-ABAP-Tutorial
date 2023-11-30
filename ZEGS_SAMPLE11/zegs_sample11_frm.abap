@@ -21,6 +21,20 @@ FORM get_data .
    INNER JOIN ekpo ON ekpo~ebeln EQ ekko~ebeln
   INTO CORRESPONDING FIELDS OF TABLE gt_list.
 
+  LOOP AT gt_list INTO gs_list.
+    IF gs_list-ebelp EQ '10'.
+      gs_list-line_color = 'C600'.
+      MODIFY gt_list FROM gs_list.
+    ELSEIF gs_list-ebelp EQ '20'.
+      gs_list-line_color = 'C300'.
+      MODIFY gt_list FROM gs_list.
+    ELSEIF gs_list-ebelp EQ '30'.
+      gs_list-line_color = 'C500'.
+      MODIFY gt_list FROM gs_list.
+    ENDIF.
+
+  ENDLOOP.
+
 ENDFORM.
 *&---------------------------------------------------------------------*
 *&      Form  SET_FIELDCAT
@@ -88,6 +102,7 @@ FORM set_layout .
   gs_layout-zebra             = 'X'.
   gs_layout-colwidth_optimize = 'X'.
   gs_layout-box_fieldname = 'SELKZ'.
+  gs_layout-info_fieldname = 'LINE_COLOR'.
 
 ENDFORM.
 *&---------------------------------------------------------------------*

@@ -2,13 +2,14 @@
 *&  Include           ZEGS_SAMPLE11_TOP
 *&---------------------------------------------------------------------*
 TYPES: BEGIN OF gty_list,
-         selkz TYPE char1,
-         ebeln TYPE ebeln,
-         ebelp TYPE ebelp,
-         bstyp TYPE ebstyp,
-         bsart TYPE ebsart,
-         txz01 TYPE txz01,
-         menge TYPE bstmg,
+         selkz      TYPE char1,
+         ebeln      TYPE ebeln,
+         ebelp      TYPE ebelp,
+         bstyp      TYPE ebstyp,
+         bsart      TYPE ebsart,
+         txz01      TYPE txz01,
+         menge      TYPE bstmg,
+         line_color TYPE char4,
        END OF gty_list.
 
 DATA: gt_list TYPE TABLE OF gty_list,
