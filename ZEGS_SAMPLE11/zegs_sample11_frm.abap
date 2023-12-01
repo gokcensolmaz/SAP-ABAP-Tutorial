@@ -141,10 +141,32 @@ FORM display_alv .
   gs_event-form = 'END_OF_LIST'.
   APPEND gs_event TO gt_events.
 
-  gs_event-name = slis_ev_pf_status_set.
-  gs_event-form = 'PF_STATUS_SET'.
-  APPEND gs_event TO gt_events.
+*  gs_event-name = slis_ev_pf_status_set.
+*  gs_event-form = 'PF_STATUS_SET'.
+*  APPEND gs_event TO gt_events.
 
+
+  gs_exclude-fcode = '&ILT'.
+  APPEND gs_exclude TO gt_exclude.
+
+  gs_sort-tabname = 'GT_LIST'.
+  gs_sort-spos = 1.
+  gs_sort-fieldname = 'EBELN'.
+  gs_sort-up = abap_true.
+  APPEND gs_sort TO gt_sort.
+
+  gs_sort-tabname = 'GT_LIST'.
+  gs_sort-spos = 2.
+  gs_sort-fieldname = 'EBELP'.
+  gs_sort-down = abap_true.
+  APPEND gs_sort TO gt_sort.
+
+  gs_filter-tabname = 'GT_LIST'.
+  gs_filter-fieldname = 'EBELP'.
+  gs_filter-sign0 = 'I'.
+  gs_filter-optio = 'LT'.
+  gs_filter-valuf_int = '20'.
+  APPEND gs_filter TO gt_filter.
 
   CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
     EXPORTING
@@ -163,10 +185,10 @@ FORM display_alv .
 *     I_GRID_SETTINGS         =
       is_layout               = gs_layout
       it_fieldcat             = gt_fieldcat
-*     IT_EXCLUDING            =
+      it_excluding            = gt_exclude
 *     IT_SPECIAL_GROUPS       =
-*     IT_SORT                 =
-*     IT_FILTER               =
+      it_sort                 = gt_sort
+      it_filter               = gt_filter
 *     IS_SEL_HIDE             =
 *     I_DEFAULT               = 'X'
 *     I_SAVE                  = ' '
