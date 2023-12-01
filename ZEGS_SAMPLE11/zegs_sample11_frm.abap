@@ -168,6 +168,13 @@ FORM display_alv .
   gs_filter-valuf_int = '20'.
   APPEND gs_filter TO gt_filter.
 
+* I_SAVE = ' '  --> Display variants cannot be saved
+* I_SAVE = 'X'  --> Standard save mode
+* I_SAVE = 'U'  --> User-specific save mode
+* I_SAVE = 'A'  --> Standar and user-specific save mode
+
+
+
   CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
     EXPORTING
 *     I_INTERFACE_CHECK       = ' '
@@ -191,7 +198,7 @@ FORM display_alv .
       it_filter               = gt_filter
 *     IS_SEL_HIDE             =
 *     I_DEFAULT               = 'X'
-*     I_SAVE                  = ' '
+      i_save                  = ' '
 *     IS_VARIANT              =
       it_events               = gt_events
 *     IT_EVENT_EXIT           =
