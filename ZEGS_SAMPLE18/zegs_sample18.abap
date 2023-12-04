@@ -12,7 +12,7 @@ INCLUDE zegs_sample18_pbo.
 INCLUDE zegs_sample18_pai.
 INCLUDE zegs_sample18_frm.
 
-DATA: gs_scarr TYPE scarr.
+
 
 START-OF-SELECTION.
 
