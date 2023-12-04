@@ -11,7 +11,7 @@
 *----------------------------------------------------------------------*
 FORM get_data .
   SELECT * FROM scarr
-    INTO TABLE gt_scarr.
+    INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
 ENDFORM.
 *&---------------------------------------------------------------------*
 *&      Form  DISPLAY_ALV
@@ -76,34 +76,47 @@ ENDFORM.
 *  <--  p2        text
 *----------------------------------------------------------------------*
 FORM set_fcat .
-  CLEAR: gs_fcat.
-  gs_fcat-fieldname = 'CARRID'.
-  gs_fcat-scrtext_s = 'Airline ID'.
-  gs_fcat-scrtext_m = 'Airline Comp. ID'.
-  gs_fcat-scrtext_l = 'Airline Company ID'.
-  APPEND gs_fcat TO gt_fcat.
+*  CLEAR: gs_fcat.
+*  gs_fcat-fieldname = 'CARRID'.
+*  gs_fcat-scrtext_s = 'Airline ID'.
+*  gs_fcat-scrtext_m = 'Airline Comp. ID'.
+*  gs_fcat-scrtext_l = 'Airline Company ID'.
+*  APPEND gs_fcat TO gt_fcat.
+*
+*  CLEAR: gs_fcat.
+*  gs_fcat-fieldname = 'CARRNAME'.
+*  gs_fcat-scrtext_s = 'Airline N'.
+*  gs_fcat-scrtext_m = 'Airline Comp. Name'.
+*  gs_fcat-scrtext_l = 'Airline Company Name'.
+*  APPEND gs_fcat TO gt_fcat.
+*
+*  CLEAR: gs_fcat.
+*  gs_fcat-fieldname = 'CURRCODE'.
+*  gs_fcat-scrtext_s = 'Airline CR'.
+*  gs_fcat-scrtext_m = 'Airline Currency'.
+*  gs_fcat-scrtext_l = 'Airline Company National Currency'.
+*  APPEND gs_fcat TO gt_fcat.
+*
+*  CLEAR: gs_fcat.
+*  gs_fcat-fieldname = 'URL'.
+*  gs_fcat-scrtext_s = 'Airl. URL'.
+*  gs_fcat-scrtext_m = 'Airline URL'.
+*  gs_fcat-scrtext_l = 'Airline Company URL'.
+*  gs_fcat-hotspot = abap_true.
+*  APPEND gs_fcat TO gt_fcat.
 
-  CLEAR: gs_fcat.
-  gs_fcat-fieldname = 'CARRNAME'.
-  gs_fcat-scrtext_s = 'Airline N'.
-  gs_fcat-scrtext_m = 'Airline Comp. Name'.
-  gs_fcat-scrtext_l = 'Airline Company Name'.
-  APPEND gs_fcat TO gt_fcat.
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      i_structure_name = 'ZEGS_SMP18_S_SCARR'
+*     I_INTERNAL_TABNAME           =
+    CHANGING
+      ct_fieldcat      = gt_fcat.
 
-  CLEAR: gs_fcat.
-  gs_fcat-fieldname = 'CURRCODE'.
-  gs_fcat-scrtext_s = 'Airline CR'.
-  gs_fcat-scrtext_m = 'Airline Currency'.
-  gs_fcat-scrtext_l = 'Airline Company National Currency'.
-  APPEND gs_fcat TO gt_fcat.
+  READ TABLE gt_fcat ASSIGNING <gfs_fc> WITH  KEY fieldname = 'MESSAGE'.
+  IF sy-subrc EQ 0.
+    <gfs_fc>-edit = abap_true.
+  ENDIF.
 
-  CLEAR: gs_fcat.
-  gs_fcat-fieldname = 'URL'.
-  gs_fcat-scrtext_s = 'Airl. URL'.
-  gs_fcat-scrtext_m = 'Airline URL'.
-  gs_fcat-scrtext_l = 'Airline Company URL'.
-  gs_fcat-hotspot = abap_true.
-  APPEND gs_fcat TO gt_fcat.
 ENDFORM.
 *&---------------------------------------------------------------------*
 *&      Form  SET_LAYOUT
