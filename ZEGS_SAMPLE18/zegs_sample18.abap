@@ -17,5 +17,7 @@ DATA: gs_scarr TYPE scarr.
 START-OF-SELECTION.
 
   PERFORM get_data.
+  perform set_fcat.
+  PERFORM set_layout.
 
   CALL SCREEN 0100.
