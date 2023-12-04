@@ -12,6 +12,23 @@
 FORM get_data .
   SELECT * FROM scarr
     INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+
+  LOOP AT gt_scarr ASSIGNING <gfs_scarr>.
+    CASE <gfs_scarr>-currcode.
+      WHEN 'USD'.
+        <gfs_scarr>-line_color = 'C710'.
+      WHEN 'JPY'.
+        <gfs_scarr>-line_color = 'C601'.
+      WHEN 'EUR'.
+        CLEAR: gs_cell_color.
+        gs_cell_color-fname  = 'URL'.
+        gs_cell_color-color-col = '3'.
+        gs_cell_color-color-int = '1'.
+        gs_cell_color-color-inv = '0'.
+
+        append gs_cell_color to <gfs_scarr>-cell_color.
+    ENDCASE.
+  ENDLOOP.
 ENDFORM.
 *&---------------------------------------------------------------------*
 *&      Form  DISPLAY_ALV
@@ -130,4 +147,6 @@ FORM set_layout .
   CLEAR: gs_layout.
   gs_layout-cwidth_opt = abap_true.
   gs_layout-zebra = abap_true.
+  gs_layout-info_fname = 'LINE_COLOR'.
+  gs_layout-ctab_fname = 'CELL_COLOR'.
 ENDFORM.
