@@ -13,6 +13,12 @@ FORM get_data .
   SELECT * FROM scarr
     INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
 
+
+*------------ICON FOR ALL LINES-------------------
+*    LOOP AT gt_scarr ASSIGNING <gfs_scarr>.
+*      <gfs_scarr>-status = '@01@'.
+*    ENDLOOP.
+
 *&---------------------------CELL COLOR---------------------------------*
 *  LOOP AT gt_scarr ASSIGNING <gfs_scarr>.
 *    CASE <gfs_scarr>-currcode.
@@ -48,30 +54,35 @@ FORM display_alv .
 *    EXPORTING
 *      i_parent = cl_gui_container=>screen0.
 *&-----------------FULL SCREEN CONTAINER-------------------------------*
+  IF go_alv IS INITIAL.
 
-  CREATE OBJECT go_container
-    EXPORTING
-      container_name = 'CC_ALV'.
 
-  CREATE OBJECT go_alv
-    EXPORTING
-      i_parent = go_container.
+    CREATE OBJECT go_container
+      EXPORTING
+        container_name = 'CC_ALV'.
 
-  CALL METHOD go_alv->set_table_for_first_display
-    EXPORTING
-      is_layout       = gs_layout
-    CHANGING
-      it_outtab       = gt_scarr
-      it_fieldcatalog = gt_fcat.
+    CREATE OBJECT go_alv
+      EXPORTING
+        i_parent = go_container.
+
+    CALL METHOD go_alv->set_table_for_first_display
+      EXPORTING
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_scarr
+        it_fieldcatalog = gt_fcat.
 
 *--------------When pressed enter handle edit-----------------*
 *  CALL METHOD go_alv->register_edit_event
 *    EXPORTING
 *      i_event_id = cl_gui_alv_grid=>mc_evt_enter.
 
-  CALL METHOD go_alv->register_edit_event
-    EXPORTING
-      i_event_id = cl_gui_alv_grid=>mc_evt_modified.
+    CALL METHOD go_alv->register_edit_event
+      EXPORTING
+        i_event_id = cl_gui_alv_grid=>mc_evt_modified.
+  ELSE.
+    CALL METHOD go_alv->refresh_table_display.
+  ENDIF.
 
 
 ENDFORM.
@@ -84,6 +95,13 @@ ENDFORM.
 *  <--  p2        text
 *----------------------------------------------------------------------*
 FORM set_fcat .
+  CLEAR: gs_fcat.
+  gs_fcat-fieldname = 'STATUS'.
+  gs_fcat-scrtext_s = 'Status'.
+  gs_fcat-scrtext_m = 'Airline Status'.
+  gs_fcat-scrtext_l = 'Airline Company Status'.
+  APPEND gs_fcat TO gt_fcat.
+
   CLEAR: gs_fcat.
   gs_fcat-fieldname = 'CARRID'.
   gs_fcat-scrtext_s = 'Airline ID'.
@@ -163,16 +181,26 @@ ENDFORM.
 *  <--  p2        text
 *----------------------------------------------------------------------*
 FORM get_total_sum .
-  DATA: lv_sum   TYPE int4,
-        lv_sum_c TYPE char10,
-        lv_mess  TYPE char200.
+  DATA: lv_sum     TYPE int4,
+        lv_lines   TYPE int4,
+        lv_average TYPE int4.
+
   LOOP AT gt_scarr INTO gs_scarr.
     lv_sum = lv_sum + gs_scarr-cost.
   ENDLOOP.
-  lv_sum_c = lv_sum.
 
-  CONCATENATE 'Tüm Satırların toplamı = '
-              lv_sum_c
-              INTO lv_mess.
-  MESSAGE: lv_mess TYPE 'I'.
+  DESCRIBE TABLE gt_scarr LINES lv_lines.
+
+  lv_average = lv_sum / lv_lines.
+
+  LOOP AT gt_scarr ASSIGNING <gfs_scarr>.
+
+    IF <gfs_scarr>-cost GT lv_average.
+      <gfs_scarr>-status = '@0A@'.
+    ELSEIF <gfs_scarr>-cost LT lv_average.
+      <gfs_scarr>-status = '@08@'.
+    ELSE.
+      <gfs_scarr>-status = '@09@'.
+    ENDIF.
+  ENDLOOP.
 ENDFORM.

@@ -1,17 +1,19 @@
 *&---------------------------------------------------------------------*
 *&  Include           ZEGS_SAMPLE18_TOP
 *&---------------------------------------------------------------------*
+TYPE-POOLS icon.
 
 DATA: go_alv       TYPE REF TO cl_gui_alv_grid,
       go_container TYPE REF TO cl_gui_custom_container.
 
 TYPES: BEGIN OF gty_scarr,
+         status   TYPE icon_d,
          carrid   TYPE s_carr_id,
          carrname TYPE s_carrname,
          currcode TYPE s_currcode,
          url      TYPE s_carrurl,
          cost     TYPE int4,
-         message  TYPE char20,
+*         message  TYPE char20,
 *         line_color TYPE char4,
 *         cell_color TYPE lvc_t_scol,
        END OF gty_scarr.
