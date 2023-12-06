@@ -48,14 +48,13 @@ ENDFORM.
 *  <--  p2        text
 *----------------------------------------------------------------------*
 FORM display_alv .
-
 *&-----------------FULL SCREEN CONTAINER-------------------------------*
 *  CREATE OBJECT go_alv
 *    EXPORTING
 *      i_parent = cl_gui_container=>screen0.
 *&-----------------FULL SCREEN CONTAINER-------------------------------*
-  IF go_alv IS INITIAL.
 
+  IF go_alv IS INITIAL.
 
     CREATE OBJECT go_container
       EXPORTING
@@ -64,6 +63,8 @@ FORM display_alv .
     CREATE OBJECT go_alv
       EXPORTING
         i_parent = go_container.
+
+    PERFORM set_dropdown.
 
     CALL METHOD go_alv->set_table_for_first_display
       EXPORTING
@@ -131,8 +132,18 @@ FORM set_fcat .
 *  gs_fcat-hotspot = abap_true.
   APPEND gs_fcat TO gt_fcat.
 
+*&----------------Add Dropdown Column----------------------------------*
   CLEAR: gs_fcat.
-  gs_fcat-fieldname = 'Cost'.
+  gs_fcat-fieldname = 'LOCATION'.
+  gs_fcat-scrtext_s = 'Location'.
+  gs_fcat-scrtext_m = 'Location'.
+  gs_fcat-scrtext_l = 'Location'.
+  gs_fcat-edit      = abap_true.
+  gs_fcat-drdn_hndl = 1.
+  APPEND gs_fcat TO gt_fcat.
+
+  CLEAR: gs_fcat.
+  gs_fcat-fieldname = 'COST'.
   gs_fcat-scrtext_s = 'Cost'.
   gs_fcat-scrtext_m = 'Airline Cost'.
   gs_fcat-scrtext_l = 'Airline Company Cost'.
@@ -203,4 +214,34 @@ FORM get_total_sum .
       <gfs_scarr>-status = '@09@'.
     ENDIF.
   ENDLOOP.
+
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  SET_DROPDOWN
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM set_dropdown .
+  DATA: lt_dropdown TYPE lvc_t_drop,
+        ls_dropdown TYPE lvc_s_drop.
+
+  CLEAR: ls_dropdown.
+  ls_dropdown-handle = 1.
+  ls_dropdown-value = 'Domestic'.
+  APPEND ls_dropdown TO lt_dropdown.
+
+  CLEAR: ls_dropdown.
+  ls_dropdown-handle = 1.
+  ls_dropdown-value = 'International'.
+  APPEND ls_dropdown TO lt_dropdown.
+
+  go_alv->set_drop_down_table(
+    EXPORTING
+      it_drop_down       = lt_dropdown
+  ).
 ENDFORM.
