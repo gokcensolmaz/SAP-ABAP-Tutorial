@@ -8,18 +8,18 @@
 REPORT zegs_sample21.
 
 
-INCLUDE ZEGS_SAMPLE21_TOP.
-INCLUDE ZEGS_SAMPLE21_CLS.
-INCLUDE ZEGS_SAMPLE21_PBO.
-INCLUDE ZEGS_SAMPLE21_PAI.
-INCLUDE ZEGS_SAMPLE21_FRM.
+INCLUDE zegs_sample21_top.
+INCLUDE zegs_sample21_cls.
+INCLUDE zegs_sample21_pbo.
+INCLUDE zegs_sample21_pai.
+INCLUDE zegs_sample21_frm.
 
 
 
 START-OF-SELECTION.
 
   PERFORM get_data.
-  perform set_fcat.
+  PERFORM set_fcat.
   PERFORM set_layout.
 
   CALL SCREEN 0100.
