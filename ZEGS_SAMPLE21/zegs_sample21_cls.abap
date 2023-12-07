@@ -79,28 +79,39 @@ CLASS cl_event_receiver IMPLEMENTATION.
       CASE e_column_id.
         WHEN 'CARRID'.
           CONCATENATE 'Column: '
-                      e_column_id
+                      e_column_id-fieldname
                       'with value: '
-                      gs_scarr-carrid-fieldname
+                      gs_scarr-carrid
                       INTO lv_mess
                         SEPARATED BY space.
 
-          MESSAGE lv_mess type 'I'.
-          WHEN 'CARRNAME'.
+          MESSAGE lv_mess TYPE 'I'.
+        WHEN 'CARRNAME'.
           CONCATENATE 'Column: '
-                      e_column_id
+                      e_column_id-fieldname
                       'with value: '
-                      gs_scarr-carrname-fieldname
+                      gs_scarr-carrname
                       INTO lv_mess
                         SEPARATED BY space.
 
-          MESSAGE lv_mess type 'I'.
+          MESSAGE lv_mess TYPE 'I'.
       ENDCASE.
     ENDIF.
   ENDMETHOD.
 
   METHOD handle_double_click.
-    BREAK-POINT.
+    DATA: lv_mess TYPE char200.
+    READ TABLE gt_scarr INTO gs_scarr INDEX e_row-index.
+    IF sy-subrc EQ 0.
+      CONCATENATE 'Column: '
+                   e_column-fieldname
+                   'with value: '
+                   gs_scarr
+                   INTO lv_mess
+                       SEPARATED BY space.
+
+      MESSAGE lv_mess TYPE 'I'.
+    ENDIF.
   ENDMETHOD.
 
   METHOD handle_data_changed.

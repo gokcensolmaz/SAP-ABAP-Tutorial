@@ -65,6 +65,7 @@ FORM display_alv .
     CREATE OBJECT go_event_receiver.
     SET HANDLER go_event_receiver->handle_top_of_page FOR go_grid.
     SET HANDLER go_event_receiver->handle_hotspot_click FOR go_grid.
+    SET HANDLER go_event_receiver->handle_double_click FOR go_grid.
 
     CALL METHOD go_grid->set_table_for_first_display
       EXPORTING
