@@ -67,7 +67,7 @@ FORM display_alv .
     SET HANDLER go_event_receiver->handle_hotspot_click FOR go_grid.
     SET HANDLER go_event_receiver->handle_double_click FOR go_grid.
     SET HANDLER go_event_receiver->handle_data_changed FOR go_grid.
-    call METHOD go_grid->register_edit_event
+    CALL METHOD go_grid->register_edit_event
       EXPORTING
         i_event_id = cl_gui_alv_grid=>mc_evt_modified.
 
@@ -104,14 +104,21 @@ FORM set_fcat.
       ct_fieldcat      = gt_fcat.
 
   LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
-    IF <gfs_fcat>-fieldname eq 'CARRID'.
+    IF <gfs_fcat>-fieldname EQ 'CARRID'.
       <gfs_fcat>-hotspot = abap_true.
     ENDIF.
   ENDLOOP.
   LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
-    IF <gfs_fcat>-fieldname eq 'CARRNAME'.
+    IF <gfs_fcat>-fieldname EQ 'CARRNAME'.
       <gfs_fcat>-edit = abap_true.
     ENDIF.
+  ENDLOOP.
+  LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
+    IF <gfs_fcat>-fieldname EQ 'CURRCODE'.
+      <gfs_fcat>-edit = abap_true.
+      <gfs_fcat>-f4availabl = abap_true.
+    ENDIF.
+
   ENDLOOP.
 ENDFORM.
 *&---------------------------------------------------------------------*
