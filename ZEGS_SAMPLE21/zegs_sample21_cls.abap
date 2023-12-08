@@ -115,7 +115,22 @@ CLASS cl_event_receiver IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD handle_data_changed.
-    BREAK-POINT.
+    DATA: ls_modi TYPE lvc_s_modi,
+          lv_mess TYPE char200.
+    LOOP AT er_data_changed->mt_good_cells INTO ls_modi.
+      READ TABLE gt_scarr INTO gs_scarr INDEX ls_modi-row_id.
+      IF sy-subrc EQ 0.
+
+      ENDIF.
+      CONCATENATE ls_modi-fieldname
+                  '=> old value:'
+                  gs_scarr-carrname
+                  ', new value:'
+                  ls_modi-value
+                  INTO lv_mess
+                  SEPARATED BY space.
+      MESSAGE lv_mess TYPE 'I'.
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD handle_onf4.
