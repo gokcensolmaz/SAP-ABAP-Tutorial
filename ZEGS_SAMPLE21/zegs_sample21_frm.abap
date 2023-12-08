@@ -12,6 +12,11 @@
 FORM get_data .
   SELECT * FROM scarr
     INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+
+    LOOP AT gt_scarr ASSIGNING <gfs_scarr>.
+      <gfs_scarr>-delete = '@11@'.
+
+    ENDLOOP.
 ENDFORM.
 *&---------------------------------------------------------------------*
 *&      Form  DISPLAY_ALV
@@ -78,6 +83,8 @@ FORM display_alv .
       EXPORTING
         i_event_id = cl_gui_alv_grid=>mc_evt_modified.
 
+    SET HANDLER go_event_receiver->handle_button_click for go_grid.
+
 
     CALL METHOD go_grid->set_table_for_first_display
       EXPORTING
@@ -109,25 +116,38 @@ FORM set_fcat.
       i_structure_name = 'SCARR'
     CHANGING
       ct_fieldcat      = gt_fcat.
-
+*&--------------hotspot_click----------------*
   LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
     IF <gfs_fcat>-fieldname EQ 'CARRID'.
       <gfs_fcat>-hotspot = abap_true.
     ENDIF.
   ENDLOOP.
+*&--------------double_click----------------*
   LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
     IF <gfs_fcat>-fieldname EQ 'CARRNAME'.
       <gfs_fcat>-edit = abap_true.
     ENDIF.
   ENDLOOP.
+*&--------------on_f4----------------*
   LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
     IF <gfs_fcat>-fieldname EQ 'CURRCODE'.
       <gfs_fcat>-edit = abap_true.
       <gfs_fcat>-f4availabl = abap_true.
 *      <gfs_fcat>-style = cl_gui_alv_grid=>mc_style_f4.
     ENDIF.
-
   ENDLOOP.
+*&--------------pushbutton_click----------------*
+  CLEAR: gs_fcat.
+  gs_fcat-fieldname = 'DELETE'.
+  gs_fcat-scrtext_s = 'Delete'.
+  gs_fcat-scrtext_m = 'Delete'.
+  gs_fcat-scrtext_l = 'Delete'.
+  gs_fcat-style = cl_gui_alv_grid=>mc_style_button.
+  gs_fcat-icon = abap_true.
+  APPEND gs_fcat TO gt_fcat.
+
+
+
 ENDFORM.
 *&---------------------------------------------------------------------*
 *&      Form  SET_LAYOUT
