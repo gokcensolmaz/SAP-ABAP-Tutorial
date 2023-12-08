@@ -215,8 +215,30 @@ CLASS cl_event_receiver IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD handle_toolbar.
+    DATA: ls_toolbar TYPE stb_button.
+
+    CLEAR: ls_toolbar.
+    ls_toolbar-function = '&DEL'.
+    ls_toolbar-text = 'Delete'.
+    ls_toolbar-icon = '@11@'.
+    ls_toolbar-quickinfo = 'Delete Operation'.
+    APPEND ls_toolbar TO e_object->mt_toolbar.
+
+    CLEAR: ls_toolbar.
+    ls_toolbar-function = '&DIS'.
+    ls_toolbar-text = 'Display'.
+    ls_toolbar-icon = '@10@'.
+    ls_toolbar-quickinfo = 'Display Operation'.
+*    ls_toolbar-disabled = abap_true.
+    APPEND ls_toolbar TO e_object->mt_toolbar.
   ENDMETHOD.
 
   METHOD handle_user_command.
+    CASE e_ucomm.
+      WHEN '&DEL'.
+        MESSAGE 'Clicked on Delete Button.' TYPE 'I'.
+      WHEN '&DIS'.
+        MESSAGE 'Clicked on Display Button.' TYPE 'I'.
+    ENDCASE.
   ENDMETHOD.
 ENDCLASS.

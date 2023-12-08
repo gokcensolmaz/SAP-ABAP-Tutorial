@@ -85,6 +85,10 @@ FORM display_alv .
 
     SET HANDLER go_event_receiver->handle_button_click for go_grid.
 
+    SET HANDLER go_event_receiver->handle_toolbar for go_grid.
+    SET HANDLER go_event_receiver->handle_user_command for go_grid.
+
+
 
     CALL METHOD go_grid->set_table_for_first_display
       EXPORTING
@@ -161,6 +165,7 @@ FORM set_layout .
   CLEAR: gs_layout.
   gs_layout-cwidth_opt = abap_true.
   gs_layout-zebra = abap_true.
+*  gs_layout-no_toolbar = abap_true.
 ENDFORM.
 *&---------------------------------------------------------------------*
 *&      Form  REGISTER_F4
