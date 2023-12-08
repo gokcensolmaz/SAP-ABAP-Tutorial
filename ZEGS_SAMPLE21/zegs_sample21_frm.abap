@@ -62,11 +62,18 @@ FORM display_alv .
       EXPORTING
         style = 'ALV_GRID'.
 
+    PERFORM register_f4.
+
     CREATE OBJECT go_event_receiver.
     SET HANDLER go_event_receiver->handle_top_of_page FOR go_grid.
     SET HANDLER go_event_receiver->handle_hotspot_click FOR go_grid.
     SET HANDLER go_event_receiver->handle_double_click FOR go_grid.
     SET HANDLER go_event_receiver->handle_data_changed FOR go_grid.
+    CALL METHOD go_grid->register_edit_event
+      EXPORTING
+        i_event_id = cl_gui_alv_grid=>mc_evt_modified.
+
+    SET HANDLER go_event_receiver->handle_onf4 FOR go_grid.
     CALL METHOD go_grid->register_edit_event
       EXPORTING
         i_event_id = cl_gui_alv_grid=>mc_evt_modified.
@@ -117,6 +124,7 @@ FORM set_fcat.
     IF <gfs_fcat>-fieldname EQ 'CURRCODE'.
       <gfs_fcat>-edit = abap_true.
       <gfs_fcat>-f4availabl = abap_true.
+*      <gfs_fcat>-style = cl_gui_alv_grid=>mc_style_f4.
     ENDIF.
 
   ENDLOOP.
@@ -133,4 +141,25 @@ FORM set_layout .
   CLEAR: gs_layout.
   gs_layout-cwidth_opt = abap_true.
   gs_layout-zebra = abap_true.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  REGISTER_F4
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM register_f4 .
+  DATA: lt_f4 TYPE lvc_t_f4,
+        ls_f4 TYPE lvc_s_f4.
+
+  CLEAR ls_f4.
+  ls_f4-fieldname = 'CURRCODE'.
+  ls_f4-register = abap_true.
+  APPEND ls_f4 TO lt_f4.
+
+  CALL METHOD go_grid->register_f4_for_fields
+    EXPORTING
+      it_f4 = lt_f4.
 ENDFORM.

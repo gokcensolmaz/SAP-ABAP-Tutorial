@@ -11,7 +11,8 @@ DATA: gt_scarr  TYPE TABLE OF scarr,
       gt_fcat   TYPE lvc_t_fcat,
       gs_layout TYPE lvc_s_layo.
 
-FIELD-SYMBOLS: <gfs_fcat> TYPE lvc_s_fcat.
+FIELD-SYMBOLS: <gfs_fcat>  TYPE lvc_s_fcat,
+               <gfs_scarr> TYPE scarr.
 
 DATA: go_spli TYPE REF TO cl_gui_splitter_container,
       go_sub1 TYPE REF TO cl_gui_container,

@@ -134,6 +134,52 @@ CLASS cl_event_receiver IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD handle_onf4.
-    BREAK-POINT.
+    TYPES: BEGIN OF lty_value_tab,
+             currcode TYPE s_currcode, "F0001
+             currdef  TYPE char40,     "F0002
+           END OF lty_value_tab.
+
+    DATA: lt_return_tab TYPE TABLE OF ddshretval,
+          ls_return_tab TYPE ddshretval.
+    DATA: lt_value_tab TYPE TABLE OF lty_value_tab,
+          ls_value_tab TYPE lty_value_tab.
+
+    CLEAR: ls_value_tab.
+    ls_value_tab-currcode = 'TRY'.
+    ls_value_tab-currdef = 'Turkish Lira'.
+    APPEND ls_value_tab TO lt_value_tab.
+
+    CLEAR: ls_value_tab.
+    ls_value_tab-currcode = 'BTC'.
+    ls_value_tab-currdef = 'Bitcoin'.
+    APPEND ls_value_tab TO lt_value_tab.
+
+    CLEAR: ls_value_tab.
+    ls_value_tab-currcode = 'XRP'.
+    ls_value_tab-currdef = 'Crypto Currency'.
+    APPEND ls_value_tab TO lt_value_tab.
+
+
+    CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
+      EXPORTING
+        retfield     = 'CURRCODE'
+        window_title = 'Currcode F4'
+        value_org    = 'S'
+      TABLES
+        value_tab    = lt_value_tab
+        return_tab   = lt_return_tab.
+
+    READ TABLE lt_return_tab INTO ls_return_tab WITH KEY fieldname = 'F0001'.
+
+    IF sy-subrc EQ 0.
+      READ TABLE gt_scarr ASSIGNING <gfs_scarr> INDEX es_row_no-row_id.
+      IF sy-subrc EQ 0.
+        <gfs_scarr>-currcode = ls_return_tab-fieldval.
+        go_grid->refresh_table_display( ).
+      ENDIF.
+    ENDIF.
+
+    er_event_data->m_event_handled = 'X'.
+
   ENDMETHOD.
 ENDCLASS.
